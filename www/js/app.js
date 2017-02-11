@@ -6,6 +6,8 @@
 // 'stocks.controllers' is found in controllers.js
 angular.module('stocks', [
   'ionic',
+  'nvd3',
+  'nvChart',
   'stocks.controllers',
   'stocks.directive',
   'stocks.filters',

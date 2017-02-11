@@ -48,7 +48,6 @@ angular.module('stocks.controllers', [])
     {ticker:'FB'},
     {ticker:'NFLX'},
     {ticker:'TSLA'},
-    {ticker:'BRK-L'},
     {ticker:'INTC'},
     {ticker:'MSFT'},
     {ticker:'GE'},
@@ -62,14 +61,14 @@ angular.module('stocks.controllers', [])
 function($scope, $stateParams,stockDataService,dateService) {
 
   $scope.ticker =  $stateParams.stockTicker ;
-  $scope.chartView = 1;
-  
+  $scope.chartView = 4;
+
   console.log(dateService.currentDate());
   console.log(dateService.oneYearAgoDate());
 
   $scope.$on('$ionicView.afterEnter', function () {
     getPriceData();
-    getDetailsData();
+    //getDetailsData();
   });
   $scope.chartViewFunc = function (n) {
     $scope.chartView = n;
@@ -79,14 +78,21 @@ function($scope, $stateParams,stockDataService,dateService) {
     promise.then(function (data) {
       console.log(data);
       $scope.stockPriceData = data;
+      if(data.chg_percent >= 0 && data !== null) {
+          $scope.reactiveColor = {'background-color': '#33cd5f', 'border-color': 'rgba(255,255,255,.3)'};
+        }
+        else if(data.chg_percent < 0 && data !== null) {
+          $scope.reactiveColor = {'background-color' : '#ef473a', 'border-color': 'rgba(0,0,0,.2)'};
+        }
     });
   }
-  function getDetailsData() {
+/*  function getDetailsData() {
     var promise = stockDataService.getDetailsData($scope.ticker);
     promise.then(function (data) {
       console.log(data);
       $scope.stockDetailsData = data;
     });
-  }
+  }*/
+
 
 }]);
