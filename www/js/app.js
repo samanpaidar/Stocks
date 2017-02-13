@@ -1,11 +1,6 @@
-// Ionic stocks App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'stocks' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'stocks.controllers' is found in controllers.js
 angular.module('stocks', [
   'ionic',
+  'angular-cache',
   'nvd3',
   'nvChart',
   'stocks.controllers',

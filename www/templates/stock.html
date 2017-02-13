@@ -4,6 +4,10 @@
     <ion-nav-back-button></ion-nav-back-button>
   </ion-nav-bar>
 
+  <ion-nav-buttons side="right">
+    <button class="button icon-left ng-style:reactiveColor" ng-class="following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="following ? 'Following ' : 'Follow '" ng-click="toggleFollow()"></button>
+  </ion-nav-buttons>
+
   <div class="bar bar-subheader bar-light">
     <div class="buttons" side="left">
       <div class="button button-clear  display-flex">
@@ -39,7 +43,7 @@
 
     <div class="card" id="market-data-card">
 
-    <div class="item item-divider">Market Data</div>
+    <div class="item item-divider">Market Data <span class="last-trade">Last trade: {{stockPriceData.utctime | date:'h:mm a'}}</span></div>
 
       <div class="row row-center">
         <div class="col">Symbole: </div>
@@ -70,22 +74,15 @@
         <div class="col col-20">{{stockPriceData.ts | shrinkNumber:2}}</div>
       </div>
 
-
-
     </div>
-    <div class="card">
-      <div class="item item-divider">Notes</div>
-      <a class="item">
-        <h2>Note title</h2>
+    <div class="card" id="stock-notes">
+      <div class="item item-divider">Notes <span ng-click="addNote()" class="add-stock-note">Add <i class="icon ion-ios-plus"></i></span></div>
+      <a class="item" ng-repeat="note in stockNotes track by $index" ng-click="openNote($index, note.title, note.body)">
+        <h2>{{note.title}}</h2>
+        <h6>{{note.date | date:'M/d/yy'}}</h6>
       </a>
     </div>
-    <div class="card">
-      <div class="item item-divider">News</div>
-      <a class="item item-icon-right">
-        <h2>News Story Title</h2>
-        <i class="icon ion-ios-arrow-right"></i>
-      </a>
-    </div>
+
 
 
   </ion-content>
