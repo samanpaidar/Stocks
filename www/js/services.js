@@ -60,6 +60,96 @@ angular.module('stocks.services', [])
   return notesCache;
 })
 
+.factory('fillMyStocksCacheService', function(CacheFactory) {
+  var myStocksCashe;
+  if(!CacheFactory.get('myStocksCache')) {
+  myStocksCache = CacheFactory('myStocksCache', {
+    storageMode: 'localStorage'
+  });
+}
+else {
+  myStocksCache = CacheFactory.get('myStocksCache');
+}
+var fillMyStocksCache = function() {
+
+  var myStocksArray = [
+    {ticker: "AAPL"},
+    {ticker: "GPRO"},
+    {ticker: "FB"},
+    {ticker: "NFLX"},
+    {ticker: "TSLA"},
+    {ticker: "BRK-A"},
+    {ticker: "INTC"},
+    {ticker: "MSFT"},
+    {ticker: "GE"},
+    {ticker: "BAC"},
+    {ticker: "C"},
+    {ticker: "T"}
+  ];
+
+  myStocksCache.put('myStocks', myStocksArray);
+};
+
+return {
+  fillMyStocksCache: fillMyStocksCache
+};
+
+})
+.factory('myStocksCacheService', function(CacheFactory) {
+
+  var myStocksCache = CacheFactory.get('myStocksCache');
+
+  return myStocksCache;
+})
+.factory('myStocksArrayService', function(fillMyStocksCacheService, myStocksCacheService) {
+
+  if(!myStocksCacheService.info('myStocks')) {
+    fillMyStocksCacheService.fillMyStocksCache();
+  }
+
+  var myStocks = myStocksCacheService.get('myStocks');
+
+  return myStocks;
+})
+.factory('followStockService', function(myStocksArrayService,myStocksCacheService ) {
+
+  return {
+
+    follow: function(ticker) {
+      var stockToAdd = {"ticker": ticker};
+
+      myStocksArrayService.push(stockToAdd);
+      myStocksCacheService.put('myStocks', myStocksArrayService);
+
+    },
+
+    unfollow: function(ticker) {
+
+      for (var i = 0; i < myStocksArrayService.length; i++) {
+        if(myStocksArrayService[i].ticker == ticker) {
+
+          myStocksArrayService.splice(i, 1);
+          myStocksCacheService.remove('myStocks');
+          myStocksCacheService.put('myStocks', myStocksArrayService);
+
+          break;
+        }
+      }
+    },
+
+    checkFollowing: function(ticker) {
+      for (var i = 0; i < myStocksArrayService.length; i++) {
+        if(myStocksArrayService[i].ticker == ticker) {
+          return true;
+        }
+      }
+
+      return false;
+
+    }
+  };
+})
+
 .factory('stockDataService', function ($q, $http, encodeURIService) {
 
   var getPriceData = function(ticker) {

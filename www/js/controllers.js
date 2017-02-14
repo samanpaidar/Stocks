@@ -41,8 +41,8 @@ angular.module('stocks.controllers', [])
   };
 })
 
-.controller('MyStokcsCtrl', ['$scope',function($scope) {
-  $scope.myStokcsArray = [
+.controller('MyStokcsCtrl', ['$scope','myStocksArrayService',function($scope,myStocksArrayService) {
+  $scope.myStokcsArray = myStocksArrayService; /*[
     {ticker:'AAPL'},
     {ticker:'GPRO'},
     {ticker:'FB'},
@@ -54,16 +54,20 @@ angular.module('stocks.controllers', [])
     {ticker:'BAC'},
     {ticker:'C'},
     {ticker:'T'}
-  ];
+  ];*/
+  console.log(myStocksArrayService);
 }])
 
-.controller('StockCtrl', ['$scope','$stateParams','$window','$ionicPopup','stockDataService','dateService','notesService',
-function($scope, $stateParams,$window,$ionicPopup,stockDataService,dateService,notesService) {
+.controller('StockCtrl', ['$scope','$stateParams','$window','$ionicPopup','followStockService','stockDataService','dateService','notesService',
+function($scope, $stateParams,$window,$ionicPopup,followStockService,stockDataService,dateService,notesService) {
 
   $scope.ticker =  $stateParams.stockTicker ;
   $scope.stockNotes = [];
   $scope.chartView = 1;
 
+  $scope.oneYearAgoDate = dateService.oneYearAgoDate();
+  $scope.todayDate = dateService.currentDate();
+  $scope.following = followStockService.checkFollowing($scope.ticker);
   console.log(dateService.currentDate());
   console.log(dateService.oneYearAgoDate());
 
@@ -75,7 +79,16 @@ function($scope, $stateParams,$window,$ionicPopup,stockDataService,dateService,n
   $scope.chartViewFunc = function (n) {
     $scope.chartView = n;
   };
-
+  $scope.toggleFollow = function() {
+     if($scope.following) {
+       followStockService.unfollow($scope.ticker);
+       $scope.following = false;
+     }
+     else {
+       followStockService.follow($scope.ticker);
+       $scope.following = true;
+     }
+   };
   $scope.addNote = function() {
       $scope.note = {title: 'Note', body: '', date: $scope.todayDate, ticker: $scope.ticker};
 
