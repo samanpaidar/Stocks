@@ -1,5 +1,6 @@
 angular.module('stocks.services', [])
 
+
 .factory('encodeURIService', function() {
   return {
     encode: function(string) {
@@ -8,6 +9,7 @@ angular.module('stocks.services', [])
     }
   };
 })
+
 
 .factory('dateService',function ( $filter ) {
   var currentDate = function () {
@@ -171,8 +173,7 @@ return {
  };
 
  return {
-   getPriceData: getPriceData,
-   //SgetDetailsData: getDetailsData
+   getPriceData: getPriceData
  };
 })
 
@@ -209,23 +210,42 @@ return {
     }
   };
 })
+
 ;
 
 
+/*.service('modalService', function($ionicModal) {
+  this.openModal = function (id) {
+    var _this = this;
+    if (id==1) {
+      $ionicModal.fromTemplateUrl('templates/search.html', {
+        scope: null,
+        controller: 'searchCtrl'
+      }).then(function(modal) {
+        _this.modal = modal;
+        _this.modal.show();
+      });
+    }
+    else if (id==2) {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+            scope: $scope
+          }).then(function(modal) {
+            $scope.modal = modal;
+          });
+    }
+    else if (id==3) {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+             scope: $scope
+           }).then(function(modal) {
+             $scope.modal = modal;
+           });
+    }
 
-/*  var getDetailsData = function (ticker) {
-    var deferred = $q.defer();
-    query = 'select * from yahoo.finance.quotes where symbol IN ("' + ticker + '")',
-    url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIService.encode(query) + '&format=json&env=http://datatables.org/alltables.env';
-    console.log(url);
-    $http.get(url)
-      .success(function(json) {
-          var jsonData = json.query.results.quote;
-          deferred.resolve(jsonData);
-    })
-    .error(function (error) {
-      console.log('details data erroe'+ error);
-      deferred.reject();
-    });
-    return deferred.promise;
-  };*/
+  };
+  this.closeModal = function () {
+    var _this = this;
+    if(!_this.modal) return;
+    _this.modal.hide();
+    _this.modal.remove();
+  };
+})*/
